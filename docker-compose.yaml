@@ -1,0 +1,18 @@
+# Compose file file format
+# Pay attention to https://boom.so/kVr7Qn
+version: '3.8'
+
+services:
+  fastapi_orc:
+    # The name will be display
+    # in docker ps
+    container_name: aiSupportPF
+    #Build the image from Dockerfile
+    build:
+      context: .
+      dockerfile: Dockerfile
+    #Expose port 30000
+    ports:
+      - '30000:30000'
+    # And set the image name
+    image: thaivosoftware/aiSupportPF:v1.0.0
