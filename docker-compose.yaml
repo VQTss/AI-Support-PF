@@ -15,4 +15,4 @@ services:
     ports:
       - '30000:30000'
     # And set the image name
-    image: thaivosoftware/aiSupportPF:v1.0.0
+    image: thaivosoftware/aisupportpf:v1.0.0
