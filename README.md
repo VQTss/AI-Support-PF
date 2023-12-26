@@ -14,7 +14,6 @@ Note that, you must use an VPN, and select USA before creating your new account.
 
 After registering your account, navigate to https://platform.openai.com/account/api-keys and click on `Create new secret key`.
 
-![API key](./imgs/chatgpt.png)
 
 When you have already created your key, update your `.env.example` file to replace my key.
 
