@@ -21,7 +21,7 @@ When you have already created your key, update your `.env.example` file to repla
 
 
 ```shell
-uvicorn main:app --host 0.0.0.0 --port 30000
+    uvicorn main:app --host 0.0.0.0 --port 30000
 ```
 
 Open your browser and access this address `localhost:30000/docs` to access API doc (Swagger UI).

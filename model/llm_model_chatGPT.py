@@ -3,7 +3,7 @@ from openai import OpenAI
 
 
 # API Key
-OPENAI_API_KEY = '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' #4.0
+
 
 # Define the OpenAI moldel algorithm
 # GPT_MODEL = "gpt-3.5-turbo-1106" #"gpt-3.5-turbo-1106" 
@@ -11,14 +11,17 @@ OPENAI_API_KEY = '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' #4.0
 GPT_MODEL = "gpt-3.5-turbo-1106"
 
 
+
+
 def initPrompt(text_input:str,new_prompt=None):
     
     if new_prompt is None:
         prompt_default = f"""
-            You will be provided with text delimited by triple quotes. 
-            Can you provide the summary of the text in 1500 words approximately?And  identify the primary emotion expressed:  
+            You will receive a text enclosed within triple quotes. Please summarize this text in approximately 1500 words, 
+            focusing on the main issue presented. Additionally, identify the primary emotion expressed in the text. 
+            The response should be structured into two sections: a summary, and an analysis of the main issue and emotion, all in English.
+            Prompt format:
             [\"\"\"{text_input}\"\"\"]. 
-            The answer is divided into 2 parts: summary and emotion by English language
             """
         return prompt_default
     else:
