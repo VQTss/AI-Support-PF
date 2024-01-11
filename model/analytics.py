@@ -4,13 +4,15 @@ import pandas as pd
 from openpyxl import Workbook
 import json
 import requests
+from utils import OPENAI_API_KEY_BB
 
 # Load the CSV file
 file_path = './data/CrispConvoTracking - Sheet13 (4).csv'
 df = pd.read_csv(file_path)
 # API Key
 # OPENAI_API_KEY = "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"  # 4.0
-
+GPT_MODEL = "gpt-3.5-turbo-1106"
+OPENAI_API_KEY= OPENAI_API_KEY_BB
 
 # def api_analytics(user_input: str):
 #     prompt_model = f"""

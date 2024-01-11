@@ -1,2 +1,5 @@
+password
 .env.example
 models/__pycache__
+
+./password

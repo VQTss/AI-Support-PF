@@ -3,7 +3,7 @@ from openai import OpenAI
 
 
 # API Key
-
+OPENAI_API_KEY = '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' #4.0
 
 # Define the OpenAI moldel algorithm
 # GPT_MODEL = "gpt-3.5-turbo-1106" #"gpt-3.5-turbo-1106" 

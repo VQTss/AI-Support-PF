@@ -22,7 +22,6 @@ stop_words = set(["a", "about", "above", "after", "again", "against", "all", "am
     ])
 
 
-
 # Function to clean text and extract phrases
 def clean_and_extract_phrases(text, stop_words):
     if not isinstance(text, str):
@@ -64,10 +63,11 @@ exclude_phrases = [
     "gotta step away anyway", "step away anyway yyessss", "away anyway yyessss thanks"
 ]
 
-def analysis_counter(file_content: bytes) -> BytesIO:
+def analysis_counter(file_path: str) -> BytesIO:
     # Load the Excel file
-    new_data = pd.read_excel(BytesIO(file_content))
+    new_data = pd.read_excel(file_path)
     output = BytesIO()
+
     # Counting phrase frequencies in each column and excluding specified phrases
     bug_phrase_counts_excluding = count_phrase_frequencies_excluding(new_data['Bug'], stop_words, exclude_phrases)
     feature_phrase_counts_excluding = count_phrase_frequencies_excluding(new_data['Feature'], stop_words, exclude_phrases)
@@ -77,26 +77,33 @@ def analysis_counter(file_content: bytes) -> BytesIO:
     combined_phrase_counts_excluding = bug_phrase_counts_excluding + feature_phrase_counts_excluding + ux_ui_phrase_counts_excluding
 
     # Creating a new dataframe for the output
-    output_data_phrases_excluding = pd.DataFrame(columns=["STT", "Phrase", "Frequency", "URL Tickets"])
+    output_data_phrases_excluding = pd.DataFrame(columns=["STT", "Phrase", "Frequency", "URL Tickets", "Related Sentences"])
 
-    # Function to find tickets containing a specific keyword or phrase
-    def find_tickets_with_keyword(keyword, data_columns):
+    # Function to find tickets and related sentences containing a specific keyword or phrase
+    def find_tickets_and_sentences_with_keyword(keyword, data_columns):
         ticket_urls = []
+        related_sentences = []
         for index, row in new_data.iterrows():
-            if any(keyword in clean_and_extract_phrases(text, stop_words) for text in row[data_columns]):
-                ticket_urls.append(row['Ticket URL'])
-        return ticket_urls
+            for column in data_columns:
+                phrases = clean_and_extract_phrases(row[column], stop_words)
+                if keyword in phrases:
+                    ticket_urls.append(row['Ticket URL'])
+                    related_sentences.append(row[column])
+        return ticket_urls, set(related_sentences)  # Using a set to avoid duplicate sentences
 
     # Populating the dataframe with the updated phrase counts
     for index, (phrase, frequency) in enumerate(combined_phrase_counts_excluding.items()):
-        ticket_urls = find_tickets_with_keyword(phrase, ['Bug', 'Feature', 'UX/UI'])
-        new_row = pd.DataFrame({
-            "STT": [index + 1],
-            "Phrase": [phrase],
-            "Frequency": [frequency],
-            "URL Tickets": [", ".join(ticket_urls)]
-        })
-        output_data_phrases_excluding = pd.concat([output_data_phrases_excluding, new_row], ignore_index=True)
+        if frequency > 2:  # Filtering out phrases with frequency <= 3
+            ticket_urls, related_sentences = find_tickets_and_sentences_with_keyword(phrase, ['Bug', 'Feature', 'UX/UI'])
+            new_row = pd.DataFrame({
+                "STT": [index + 1],
+                "Phrase": [phrase],
+                "Frequency": [frequency],
+                "URL Tickets": [", ".join(ticket_urls)],
+                "Related Sentences": [" | ".join(related_sentences)]  # Joining sentences with a separator
+            })
+            output_data_phrases_excluding = pd.concat([output_data_phrases_excluding, new_row], ignore_index=True)
+    
     output_data_phrases_excluding.to_excel(output, index=False)
     output.seek(0)
     return output
