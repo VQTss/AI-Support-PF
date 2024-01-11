@@ -10,8 +10,7 @@ file_path = './data/CrispConvoTracking - Sheet13 (4).csv'
 df = pd.read_csv(file_path)
 # API Key
 # OPENAI_API_KEY = "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"  # 4.0
-GPT_MODEL = "gpt-3.5-turbo-1106"
-OPENAI_API_KEY="5493a89d71cd4324bf02d189b88ade97"
+
 
 # def api_analytics(user_input: str):
 #     prompt_model = f"""
