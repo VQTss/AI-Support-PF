@@ -1,1 +1,2 @@
 from model.llm_model_chatGPT import llm_summary_chatGPT
+from model.analyzed import analysis_counter
